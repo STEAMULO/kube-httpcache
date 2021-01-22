@@ -84,9 +84,13 @@ func (v *VarnishController) generateArgs() []string {
 		"-F",
 		"-f", v.configFile,
 		"-S", v.SecretFile,
-		"-s", v.Storage,
 		"-a", fmt.Sprintf("%s:%d", v.FrontendAddr, v.FrontendPort),
 		"-T", fmt.Sprintf("%s:%d", v.AdminAddr, v.AdminPort),
+	}
+
+	for _, val := range strings.Split(v.Storage, ":") {
+		args = append(args, "-s")
+		args = append(args, val)
 	}
 
 	if v.AdditionalParameters != "" {
